@@ -15,15 +15,15 @@ export interface Connection {
 
 /** Fictional sample consumer. Any resemblance to a real connection is coincidental. */
 export const SAMPLE_CONNECTION: Connection = {
-  consumerName: 'Priya Sharma',
+  consumerName: 'Srinivas Sunakala',
   consumerNo: '100245',
   lpgId: '71234567890123456',
   distributor: 'Shree Sai Indane Gramin Vitrak',
-  distributorCode: 'IND-PUN-0457',
+  distributorCode: 'IND-HYD-0457',
   connectionType: 'DBC',
   registeredMobile: '••••••4321',
-  address: 'Flat 302, Sai Krupa Residency, Baner Road, Baner',
-  city: 'Pune, Maharashtra 411045',
+  address: 'Petrobazaar, Miyapur',
+  city: 'Hyderabad, Telangana',
   dbtlLinked: true,
 }
 

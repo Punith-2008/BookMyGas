@@ -29,8 +29,7 @@ Deploy `dist/` to Vercel or Netlify. `vercel.json` rewrites all paths to `index.
 
 ## Presenting
 
-- **Autoplay** runs the whole booking by itself, about 3 seconds per step. Clicking inside the app stops it.
-- **Reset demo** clears the booking before each run.
+- **Start over** clears the booking before each run.
 - The **"Not eligible yet"** checkbox shows the refill-interval check.
 - Keyboard: Enter goes to the next step, Esc goes back.
 - Everything runs offline once loaded, with no API calls.

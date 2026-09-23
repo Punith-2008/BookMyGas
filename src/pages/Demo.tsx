@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Lock } from 'lucide-react'
-import { CylinderProgress } from '../components/brand/CylinderProgress'
 import { CylinderLoader } from '../components/brand/CylinderLoader'
 import { Cylinder3D } from '../components/brand/Cylinder3D'
 import { PhoneFrame } from '../components/demo/PhoneFrame'
@@ -19,7 +18,6 @@ import { STEP_LABELS } from '../data/commentary'
 import { SAMPLE_CONNECTION } from '../data/connection'
 import { getCylinder } from '../data/cylinders'
 import { LAST_STEP, priceBreakdown, useBooking } from '../hooks/useBooking'
-import { useAutoplay } from '../hooks/useAutoplay'
 import { formatINR } from '../lib/format'
 
 const PAY_STEP = LAST_STEP - 1
@@ -28,7 +26,6 @@ const PROCESSING_MS = 1500
 export default function Demo() {
   const { state, dispatch, maxQty } = useBooking()
   const [processing, setProcessing] = useState(false)
-  const [autoplay, setAutoplay] = useState(false)
   const [memoOpen, setMemoOpen] = useState(false)
   const [showSms, setShowSms] = useState(false)
   // Only celebrate for a booking made in this session, not one restored from storage.
@@ -36,7 +33,7 @@ export default function Demo() {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    document.title = 'Live Demo · BookMyGas'
+    document.title = 'Book Indane Refill · BookMyGas'
   }, [])
 
   useEffect(() => {
@@ -61,7 +58,6 @@ export default function Demo() {
   }, [state.step, pay, dispatch])
 
   const reset = useCallback(() => {
-    setAutoplay(false)
     setProcessing(false)
     setCelebrate(false)
     setShowSms(false)
@@ -70,21 +66,6 @@ export default function Demo() {
   }, [dispatch])
 
   const blocked = state.step === 0 && state.notEligible
-
-  useAutoplay(autoplay, () => {
-    if (state.step >= LAST_STEP || blocked) {
-      setAutoplay(false)
-      return false
-    }
-    next()
-    return true
-  })
-
-  const toggleAutoplay = () => {
-    if (autoplay) return setAutoplay(false)
-    if (state.step === LAST_STEP || blocked) reset()
-    setAutoplay(true)
-  }
 
   // Keyboard: Enter = Next, Esc = Back (ignored while typing or on buttons/links).
   useEffect(() => {
@@ -99,7 +80,6 @@ export default function Demo() {
     return () => window.removeEventListener('keydown', onKey)
   }, [next, dispatch, state.step, blocked, memoOpen, processing])
 
-  const stopAutoplay = () => autoplay && setAutoplay(false)
   const price = priceBreakdown(state)
   const cyl = getCylinder(state.cylinder)
 
@@ -123,7 +103,7 @@ export default function Demo() {
       <div className="cylinder-pattern pointer-events-none fixed inset-0 opacity-[0.04]" aria-hidden="true" />
       <div className="pointer-events-none fixed -left-40 top-1/3 h-[500px] w-[500px] rounded-full bg-flame-500/20 blur-3xl" aria-hidden="true" />
 
-      <DemoTopBar autoplay={autoplay} onToggleAutoplay={toggleAutoplay} onReset={reset} />
+      <DemoTopBar onReset={reset} />
 
       <p className="sr-only" aria-live="polite">
         Step {state.step + 1} of {STEP_LABELS.length}: {STEP_LABELS[state.step]}
@@ -136,7 +116,6 @@ export default function Demo() {
             step={state.step}
             notEligible={state.notEligible}
             onToggleNotEligible={(value) => {
-              setAutoplay(false)
               setCelebrate(false)
               dispatch({ type: 'setNotEligible', value })
             }}
@@ -144,14 +123,13 @@ export default function Demo() {
         </div>
 
         {/* the app */}
-        <div className="flex w-full flex-col lg:w-auto" onPointerDownCapture={stopAutoplay}>
+        <div className="flex w-full flex-col lg:w-auto">
           <PhoneFrame>
             <div className="bg-navy-900 px-4 pb-3 pt-3 lg:pt-10">
-              <div className="mb-2 flex items-center justify-between text-white">
+              <div className="flex items-center justify-between text-white">
                 <span className="font-heading text-sm font-bold">Book Indane Refill</span>
                 <span className="text-[0.65rem] text-white/60">Consumer No. {SAMPLE_CONNECTION.consumerNo}</span>
               </div>
-              <CylinderProgress step={state.step} labels={STEP_LABELS} />
             </div>
 
             <div ref={scrollRef} className="relative flex-1 overflow-y-auto px-4 py-5">
@@ -234,7 +212,6 @@ export default function Demo() {
               type="checkbox"
               checked={state.notEligible}
               onChange={(e) => {
-                setAutoplay(false)
                 setCelebrate(false)
                 dispatch({ type: 'setNotEligible', value: e.target.checked })
               }}
@@ -255,7 +232,7 @@ export default function Demo() {
       </main>
 
       <p className="relative pb-4 text-center text-[0.65rem] text-slate-500">
-        Concept demo, not an official IOCL product. Illustrative prices, fictional consumer.
+        Not an official IOCL product. Prices are illustrative.
       </p>
 
       {memoOpen && <CashMemo state={state} onClose={() => setMemoOpen(false)} />}
