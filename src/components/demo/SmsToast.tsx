@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { MessageSquare } from 'lucide-react'
 
-export function SmsToast({ bookingRef, dac, distributor }: { bookingRef: string; dac: string; distributor: string }) {
+export function SmsToast({ bookingRef, dac, distributor, bulk }: { bookingRef: string; dac: string; distributor: string; bulk: boolean }) {
   return (
     <motion.div
       initial={{ y: -120, opacity: 0 }}
@@ -18,7 +18,7 @@ export function SmsToast({ bookingRef, dac, distributor }: { bookingRef: string;
         MESSAGES · BK-BMYGAS · now
       </div>
       <p className="mt-1.5 text-xs leading-snug text-navy-900">
-        Your Indane refill booking <b>{bookingRef}</b> is confirmed. DAC: <b>{dac}</b>. Distributor: {distributor}. – BookMyGas
+        Your Indane {bulk ? 'commercial bulk order' : 'refill booking'} <b>{bookingRef}</b> is confirmed. DAC: <b>{dac}</b>. Distributor: {distributor}. – BookMyGas
       </p>
     </motion.div>
   )

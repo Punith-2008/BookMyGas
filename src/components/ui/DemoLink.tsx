@@ -24,17 +24,19 @@ interface DemoLinkProps {
   size?: Size
   className?: string
   showIcon?: boolean
+  /** Open the demo directly in the business (bulk order) flow. */
+  business?: boolean
 }
 
 /**
  * The ONLY way the landing page links to the demo. Every CTA opens /demo in a new tab,
  * so the pitch deck and landing page stay open in the original tab.
  */
-export function DemoLink({ children, variant = 'primary', size = 'md', className = '', showIcon = true }: DemoLinkProps) {
+export function DemoLink({ children, variant = 'primary', size = 'md', className = '', showIcon = true, business = false }: DemoLinkProps) {
   const base = variant === 'bare' ? '' : 'inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold transition-colors'
   return (
     <Link
-      to="/demo"
+      to={business ? '/demo?mode=business' : '/demo'}
       target="_blank"
       rel="noopener noreferrer"
       className={`${base} ${VARIANTS[variant]} ${variant === 'bare' || variant === 'ghost' ? '' : SIZES[size]} ${className}`}

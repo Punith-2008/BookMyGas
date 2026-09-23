@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { Moon, Sun, Sunrise } from 'lucide-react'
+import { Moon, Repeat, Sun, Sunrise } from 'lucide-react'
 import type { BookingDispatch, BookingState } from '../../hooks/useBooking'
-import { isFillingFast, nextDates, TIME_SLOTS } from '../../lib/slots'
+import { FREQUENCIES, isFillingFast, nextDates, TIME_SLOTS } from '../../lib/slots'
 
 const SLOT_ICON = { morning: Sunrise, afternoon: Sun, evening: Moon }
 
@@ -11,8 +11,10 @@ export function StepSlot({ state, dispatch }: { state: BookingState; dispatch: B
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-extrabold">Delivery slot</h2>
-        <p className="text-sm text-slate-500">Pick a day and a time window</p>
+        <h2 className="text-xl font-extrabold">{state.segment === 'business' ? 'Delivery schedule' : 'Delivery slot'}</h2>
+        <p className="text-sm text-slate-500">
+          {state.segment === 'business' ? 'Pick the first delivery and how often to repeat it' : 'Pick a day and a time window'}
+        </p>
       </div>
 
       <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Delivery date">
@@ -65,6 +67,34 @@ export function StepSlot({ state, dispatch }: { state: BookingState; dispatch: B
           )
         })}
       </div>
+
+      {state.segment === 'business' && (
+        <div>
+          <p className="flex items-center gap-1.5 text-sm font-bold">
+            <Repeat className="h-4 w-4 text-flame-600" /> Repeat this order
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-2" role="radiogroup" aria-label="Delivery frequency">
+            {FREQUENCIES.map((f) => {
+              const active = state.frequency === f.id
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => dispatch({ type: 'setFrequency', frequency: f.id })}
+                  className={`rounded-2xl px-3 py-2.5 text-left text-sm transition ${
+                    active ? 'bg-navy-900 text-white' : 'bg-white shadow-card'
+                  }`}
+                >
+                  <span className="block font-bold">{f.label}</span>
+                  <span className={`block text-xs ${active ? 'text-white/70' : 'text-slate-500'}`}>{f.sub}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

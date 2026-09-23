@@ -1,21 +1,24 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { MessageSquareQuote } from 'lucide-react'
 import { COMMENTARY, STEP_LABELS } from '../../data/commentary'
+import type { Segment } from '../../data/cylinders'
 
 interface CommentaryPanelProps {
+  segment: Segment
   step: number
   notEligible: boolean
   onToggleNotEligible: (value: boolean) => void
 }
 
-export function CommentaryPanel({ step, notEligible, onToggleNotEligible }: CommentaryPanelProps) {
-  const c = COMMENTARY[step]
+export function CommentaryPanel({ segment, step, notEligible, onToggleNotEligible }: CommentaryPanelProps) {
+  const c = COMMENTARY[segment][step]
+  const labels = STEP_LABELS[segment]
   return (
     <aside className="w-full max-w-xs space-y-5" aria-label="Presenter commentary">
       <div>
         <p className="eyebrow text-flame-400">What’s happening</p>
         <p className="mt-1 text-xs text-slate-400">
-          Step {step + 1} of {STEP_LABELS.length} · {STEP_LABELS[step]}
+          Step {step + 1} of {labels.length} · {labels[step]}
         </p>
       </div>
       <AnimatePresence mode="wait">
@@ -32,18 +35,20 @@ export function CommentaryPanel({ step, notEligible, onToggleNotEligible }: Comm
         </motion.div>
       </AnimatePresence>
 
-      <label className="flex cursor-pointer items-start gap-3 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-        <input
-          type="checkbox"
-          checked={notEligible}
-          onChange={(e) => onToggleNotEligible(e.target.checked)}
-          className="mt-0.5 h-4 w-4 accent-amber-400"
-        />
-        <span className="text-sm">
-          <span className="block font-semibold text-white">“Not eligible yet” scenario</span>
-          <span className="text-slate-400">Pretend the last refill was 5 days ago to show the refill-interval check.</span>
-        </span>
-      </label>
+      {segment === 'household' && (
+        <label className="flex cursor-pointer items-start gap-3 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
+          <input
+            type="checkbox"
+            checked={notEligible}
+            onChange={(e) => onToggleNotEligible(e.target.checked)}
+            className="mt-0.5 h-4 w-4 accent-amber-400"
+          />
+          <span className="text-sm">
+            <span className="block font-semibold text-white">“Not eligible yet” scenario</span>
+            <span className="text-slate-400">Pretend the last refill was 5 days ago to show the refill-interval check.</span>
+          </span>
+        </label>
+      )}
 
       <p className="text-xs text-slate-500">Tip: press Enter for Next and Esc for Back.</p>
     </aside>

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { Home, Info, MapPin, Truck } from 'lucide-react'
+import { Building2, Home, Info, MapPin, Truck } from 'lucide-react'
+import type { Segment } from '../../data/cylinders'
 import { SAMPLE_CONNECTION } from '../../data/connection'
 
 function MapIllustration() {
@@ -37,29 +38,33 @@ function MapIllustration() {
   )
 }
 
-export function StepAddress() {
+export function StepAddress({ segment }: { segment: Segment }) {
+  const business = segment === 'business'
+  const Icon = business ? Building2 : Home
   const c = SAMPLE_CONNECTION
   return (
     <div className="space-y-4">
       <div>
         <h2 className="text-xl font-extrabold">Delivery address</h2>
-        <p className="text-sm text-slate-500">Where should we deliver your refill?</p>
+        <p className="text-sm text-slate-500">{business ? 'Where should we deliver your bulk order?' : 'Where should we deliver your refill?'}</p>
       </div>
       <MapIllustration />
       <div className="flex gap-3 rounded-2xl bg-flame-50 p-4 ring-2 ring-flame-500">
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-flame-500 text-white">
-          <Home className="h-5 w-5" />
+          <Icon className="h-5 w-5" />
         </span>
         <div className="text-sm">
           <p className="font-bold">
-            Home <span className="ml-1 rounded-full bg-white px-2 py-0.5 text-[0.6rem] font-bold text-flame-700">Registered</span>
+            {business ? 'Business' : 'Home'} <span className="ml-1 rounded-full bg-white px-2 py-0.5 text-[0.6rem] font-bold text-flame-700">Registered</span>
           </p>
           <p className="mt-0.5 text-slate-600">{c.address}</p>
           <p className="text-slate-600">{c.city}</p>
         </div>
       </div>
       <p className="flex gap-2 text-xs text-slate-500">
-        <Info className="h-4 w-4 shrink-0" /> Refills are delivered to your registered address. To change it, contact your distributor.
+        <Info className="h-4 w-4 shrink-0" /> {business
+          ? 'Bulk orders are delivered to your registered business address, usually in a single drop.'
+          : 'Refills are delivered to your registered address. To change it, contact your distributor.'}
       </p>
     </div>
   )

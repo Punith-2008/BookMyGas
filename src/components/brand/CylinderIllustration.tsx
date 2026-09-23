@@ -13,6 +13,7 @@ const PALETTES: Record<CylinderVariant | 'empty', Palette> = {
   domestic5: { dark: '#9E1812', mid: '#D7261E', light: '#F4665E', text: '#0B1F3A' },
   ftl5: { dark: '#8A96A6', mid: '#C9D1DB', light: '#F3F6FA', text: '#0B1F3A' },
   commercial19: { dark: '#143670', mid: '#1F4FA3', light: '#5C88D6', text: '#0B1F3A' },
+  commercial47: { dark: '#143670', mid: '#1F4FA3', light: '#5C88D6', text: '#0B1F3A' },
   empty: { dark: '#7C8594', mid: '#A3ACB9', light: '#CDD3DC', text: '#64748B' },
 }
 
@@ -22,6 +23,7 @@ const BODY_HEIGHT: Record<CylinderVariant, number> = {
   domestic5: 96,
   ftl5: 96,
   commercial19: 176,
+  commercial47: 214,
 }
 
 const LABEL: Record<CylinderVariant, string> = {
@@ -29,6 +31,7 @@ const LABEL: Record<CylinderVariant, string> = {
   domestic5: '5 kg',
   ftl5: 'FTL 5 kg',
   commercial19: '19 kg',
+  commercial47: '47.5 kg',
 }
 
 interface CylinderIllustrationProps {

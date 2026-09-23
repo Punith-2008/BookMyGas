@@ -29,6 +29,7 @@ Deploy `dist/` to Vercel or Netlify. `vercel.json` rewrites all paths to `index.
 
 ## Presenting
 
+- The **Household | Business · Bulk** switch at the top of the phone changes the flow. Open `/demo?mode=business` to start in the bulk commercial flow (the landing page's "Try a bulk order" button does this).
 - **Start over** clears the booking before each run.
 - The **"Not eligible yet"** checkbox shows the refill-interval check.
 - Keyboard: Enter goes to the next step, Esc goes back.

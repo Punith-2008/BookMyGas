@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Lock } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Building2, Home, Lock } from 'lucide-react'
 import { CylinderLoader } from '../components/brand/CylinderLoader'
 import { Cylinder3D } from '../components/brand/Cylinder3D'
 import { PhoneFrame } from '../components/demo/PhoneFrame'
 import { DemoTopBar } from '../components/demo/DemoTopBar'
 import { CommentaryPanel } from '../components/demo/CommentaryPanel'
 import { StepConnection } from '../components/demo/StepConnection'
+import { StepBusinessAccount } from '../components/demo/StepBusinessAccount'
 import { StepCylinder } from '../components/demo/StepCylinder'
+import { StepBulkOrder } from '../components/demo/StepBulkOrder'
 import { StepAddress } from '../components/demo/StepAddress'
 import { StepSlot } from '../components/demo/StepSlot'
 import { StepPayment } from '../components/demo/StepPayment'
@@ -15,26 +18,34 @@ import { StepConfirmed } from '../components/demo/StepConfirmed'
 import { SmsToast } from '../components/demo/SmsToast'
 import { CashMemo } from '../components/demo/CashMemo'
 import { STEP_LABELS } from '../data/commentary'
-import { SAMPLE_CONNECTION } from '../data/connection'
-import { getCylinder } from '../data/cylinders'
+import { SAMPLE_BUSINESS, SAMPLE_CONNECTION } from '../data/connection'
+import { getCylinder, type Segment } from '../data/cylinders'
 import { LAST_STEP, priceBreakdown, useBooking } from '../hooks/useBooking'
 import { formatINR } from '../lib/format'
 
 const PAY_STEP = LAST_STEP - 1
 const PROCESSING_MS = 1500
 
+const SEGMENTS: { id: Segment; label: string; icon: typeof Home }[] = [
+  { id: 'household', label: 'Household', icon: Home },
+  { id: 'business', label: 'Business · Bulk', icon: Building2 },
+]
+
 export default function Demo() {
-  const { state, dispatch, maxQty } = useBooking()
+  const [params, setParams] = useSearchParams()
+  const initialSegment: Segment = params.get('mode') === 'business' ? 'business' : 'household'
+  const { state, dispatch, maxQty } = useBooking(initialSegment)
   const [processing, setProcessing] = useState(false)
   const [memoOpen, setMemoOpen] = useState(false)
   const [showSms, setShowSms] = useState(false)
   // Only celebrate for a booking made in this session, not one restored from storage.
   const [celebrate, setCelebrate] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const business = state.segment === 'business'
 
   useEffect(() => {
-    document.title = 'Book Indane Refill · BookMyGas'
-  }, [])
+    document.title = business ? 'Bulk Commercial Order · BookMyGas' : 'Book Indane Refill · BookMyGas'
+  }, [business])
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 })
@@ -52,20 +63,32 @@ export default function Demo() {
     }, PROCESSING_MS)
   }, [dispatch, processing])
 
+  const price = priceBreakdown(state)
+  const blocked = (state.step === 0 && state.notEligible && !business) || (state.step === 1 && business && price.totalQty === 0)
+
   const next = useCallback(() => {
     if (state.step === PAY_STEP) pay()
     else if (state.step < PAY_STEP) dispatch({ type: 'next' })
   }, [state.step, pay, dispatch])
 
-  const reset = useCallback(() => {
+  const clearTransient = () => {
     setProcessing(false)
     setCelebrate(false)
     setShowSms(false)
     setMemoOpen(false)
+  }
+
+  const reset = useCallback(() => {
+    clearTransient()
     dispatch({ type: 'reset' })
   }, [dispatch])
 
-  const blocked = state.step === 0 && state.notEligible
+  const switchSegment = (segment: Segment) => {
+    if (segment === state.segment) return
+    clearTransient()
+    dispatch({ type: 'setSegment', segment })
+    setParams(segment === 'business' ? { mode: 'business' } : {}, { replace: true })
+  }
 
   // Keyboard: Enter = Next, Esc = Back (ignored while typing or on buttons/links).
   useEffect(() => {
@@ -80,23 +103,30 @@ export default function Demo() {
     return () => window.removeEventListener('keydown', onKey)
   }, [next, dispatch, state.step, blocked, memoOpen, processing])
 
-  const price = priceBreakdown(state)
   const cyl = getCylinder(state.cylinder)
+  const labels = STEP_LABELS[state.segment]
 
   const stepContent = [
-    <StepConnection key="c" notEligible={state.notEligible} />,
-    <StepCylinder key="y" state={state} dispatch={dispatch} maxQty={maxQty} />,
-    <StepAddress key="a" />,
+    business ? <StepBusinessAccount key="b" /> : <StepConnection key="c" notEligible={state.notEligible} />,
+    business ? (
+      <StepBulkOrder key="bulk" state={state} dispatch={dispatch} />
+    ) : (
+      <StepCylinder key="y" state={state} dispatch={dispatch} maxQty={maxQty} />
+    ),
+    <StepAddress key="a" segment={state.segment} />,
     <StepSlot key="s" state={state} dispatch={dispatch} />,
     <StepPayment key="p" state={state} dispatch={dispatch} />,
-    <StepConfirmed
-      key="d"
-      state={state}
-      celebrate={celebrate}
-      onOpenMemo={() => setMemoOpen(true)}
-      onBookAnother={reset}
-    />,
+    <StepConfirmed key="d" state={state} celebrate={celebrate} onOpenMemo={() => setMemoOpen(true)} onBookAnother={reset} />,
   ][state.step]
+
+  let nextLabel = 'Continue'
+  if (state.step === 0) nextLabel = blocked ? 'Not eligible yet' : business ? 'Start bulk order' : 'Book Refill'
+  if (state.step === 1 && blocked) nextLabel = 'Add cylinders'
+
+  const setNotEligible = (value: boolean) => {
+    setCelebrate(false)
+    dispatch({ type: 'setNotEligible', value })
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-navy-900">
@@ -106,20 +136,13 @@ export default function Demo() {
       <DemoTopBar onReset={reset} />
 
       <p className="sr-only" aria-live="polite">
-        Step {state.step + 1} of {STEP_LABELS.length}: {STEP_LABELS[state.step]}
+        Step {state.step + 1} of {labels.length}: {labels[state.step]}
       </p>
 
       <main className="relative mx-auto flex w-full max-w-7xl flex-1 items-stretch justify-center gap-10 lg:items-center lg:px-6 lg:py-8">
         {/* commentary (desktop) */}
         <div className="hidden flex-1 justify-end lg:flex">
-          <CommentaryPanel
-            step={state.step}
-            notEligible={state.notEligible}
-            onToggleNotEligible={(value) => {
-              setCelebrate(false)
-              dispatch({ type: 'setNotEligible', value })
-            }}
-          />
+          <CommentaryPanel segment={state.segment} step={state.step} notEligible={state.notEligible} onToggleNotEligible={setNotEligible} />
         </div>
 
         {/* the app */}
@@ -127,15 +150,36 @@ export default function Demo() {
           <PhoneFrame>
             <div className="bg-navy-900 px-4 pb-3 pt-3 lg:pt-10">
               <div className="flex items-center justify-between text-white">
-                <span className="font-heading text-sm font-bold">Book Indane Refill</span>
-                <span className="text-[0.65rem] text-white/60">Consumer No. {SAMPLE_CONNECTION.consumerNo}</span>
+                <span className="font-heading text-sm font-bold">{business ? 'Bulk Commercial Order' : 'Book Indane Refill'}</span>
+                <span className="text-[0.65rem] text-white/60">
+                  {business ? SAMPLE_BUSINESS.commercialConsumerNo : `Consumer No. ${SAMPLE_CONNECTION.consumerNo}`}
+                </span>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-1 rounded-full bg-white/10 p-1" role="tablist" aria-label="Order type">
+                {SEGMENTS.map((s) => {
+                  const active = s.id === state.segment
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      onClick={() => switchSegment(s.id)}
+                      className={`inline-flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                        active ? 'bg-flame-500 text-white' : 'text-white/70 hover:text-white'
+                      }`}
+                    >
+                      <s.icon className="h-3.5 w-3.5" /> {s.label}
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
             <div ref={scrollRef} className="relative flex-1 overflow-y-auto px-4 py-5">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
-                  key={state.step}
+                  key={`${state.segment}-${state.step}`}
                   initial={{ opacity: 0, x: 40 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -40 }}
@@ -161,9 +205,11 @@ export default function Demo() {
                 {state.step >= 1 && (
                   <div className="mr-auto min-w-0 text-xs leading-tight">
                     <p className="truncate text-slate-500">
-                      {cyl.weight} × {state.qty}
+                      {business ? `${price.totalQty} cylinders` : `${cyl.weight} × ${state.qty}`}
                     </p>
-                    <p className="font-heading text-base font-extrabold">{formatINR(state.step === PAY_STEP ? price.total : price.subtotal)}</p>
+                    <p className="font-heading text-base font-extrabold">
+                      {formatINR(business || state.step === PAY_STEP ? price.total : price.subtotal)}
+                    </p>
                   </div>
                 )}
                 <button
@@ -174,14 +220,16 @@ export default function Demo() {
                     state.step === 0 ? 'w-full' : ''
                   }`}
                 >
-                  {state.step === 0 && (blocked ? 'Not eligible yet' : 'Book Refill')}
-                  {state.step > 0 && state.step < PAY_STEP && 'Continue'}
-                  {state.step === PAY_STEP && (
+                  {state.step === PAY_STEP ? (
                     <>
-                      <Lock className="h-4 w-4" /> Pay &amp; Book Refill
+                      <Lock className="h-4 w-4" /> {business ? 'Pay & Place Order' : 'Pay & Book Refill'}
+                    </>
+                  ) : (
+                    <>
+                      {nextLabel}
+                      {!blocked && <ArrowRight className="h-4 w-4" />}
                     </>
                   )}
-                  {state.step < PAY_STEP && !blocked && <ArrowRight className="h-4 w-4" />}
                 </button>
               </div>
             )}
@@ -194,31 +242,30 @@ export default function Demo() {
                   exit={{ opacity: 0 }}
                   className="absolute inset-0 z-30 grid place-items-center bg-white/90 backdrop-blur-sm"
                 >
-                  <CylinderLoader label={state.payment === 'cod' ? 'Confirming booking…' : 'Processing payment…'} />
+                  <CylinderLoader label={state.payment === 'cod' ? 'Confirming order…' : 'Processing payment…'} />
                 </motion.div>
               )}
             </AnimatePresence>
 
             <AnimatePresence>
               {showSms && state.bookingRef && state.dac && (
-                <SmsToast bookingRef={state.bookingRef} dac={state.dac} distributor={SAMPLE_CONNECTION.distributor} />
+                <SmsToast bookingRef={state.bookingRef} dac={state.dac} distributor={SAMPLE_CONNECTION.distributor} bulk={business} />
               )}
             </AnimatePresence>
           </PhoneFrame>
 
           {/* mobile-only: eligibility scenario toggle */}
-          <label className="flex items-center gap-2 bg-navy-900 px-4 py-3 text-xs text-slate-300 lg:hidden">
-            <input
-              type="checkbox"
-              checked={state.notEligible}
-              onChange={(e) => {
-                setCelebrate(false)
-                dispatch({ type: 'setNotEligible', value: e.target.checked })
-              }}
-              className="h-4 w-4 accent-amber-400"
-            />
-            Show the “Not eligible yet” scenario
-          </label>
+          {!business && (
+            <label className="flex items-center gap-2 bg-navy-900 px-4 py-3 text-xs text-slate-300 lg:hidden">
+              <input
+                type="checkbox"
+                checked={state.notEligible}
+                onChange={(e) => setNotEligible(e.target.checked)}
+                className="h-4 w-4 accent-amber-400"
+              />
+              Show the “Not eligible yet” scenario
+            </label>
+          )}
         </div>
 
         {/* selected cylinder in 3D (desktop) */}
@@ -231,9 +278,7 @@ export default function Demo() {
         </div>
       </main>
 
-      <p className="relative pb-4 text-center text-[0.65rem] text-slate-500">
-        Not an official IOCL product. Prices are illustrative.
-      </p>
+      <p className="relative pb-4 text-center text-[0.65rem] text-slate-500">Not an official IOCL product. Prices are illustrative.</p>
 
       {memoOpen && <CashMemo state={state} onClose={() => setMemoOpen(false)} />}
     </div>

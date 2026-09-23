@@ -7,6 +7,7 @@ import { DemoLink } from '../ui/DemoLink'
 const LINKS = [
   { href: '#problem', label: 'Problem' },
   { href: '#how-it-works', label: 'How it Works' },
+  { href: '#business', label: 'For Business' },
   { href: '#market', label: 'Market' },
   { href: '#business-model', label: 'Business Model' },
 ]
@@ -33,7 +34,7 @@ export function Navbar() {
           <CylinderLogo />
         </a>
 
-        <ul className="hidden items-center gap-8 md:flex">
+        <ul className="hidden items-center gap-7 lg:flex">
           {LINKS.map((l) => (
             <li key={l.href}>
               <a href={l.href} className="text-sm font-semibold text-navy-900/80 transition-colors hover:text-flame-600">
@@ -49,7 +50,7 @@ export function Navbar() {
           </DemoLink>
           <button
             type="button"
-            className="grid h-10 w-10 place-items-center rounded-full text-navy-900 md:hidden"
+            className="grid h-10 w-10 place-items-center rounded-full text-navy-900 lg:hidden"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((o) => !o)}
@@ -65,7 +66,7 @@ export function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-navy-900/5 md:hidden"
+            className="overflow-hidden border-t border-navy-900/5 lg:hidden"
           >
             <ul className="container-x flex flex-col gap-1 py-4">
               {LINKS.map((l) => (

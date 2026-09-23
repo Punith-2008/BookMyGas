@@ -4,6 +4,7 @@ import { Problem } from '../components/landing/Problem'
 import { HowItWorks } from '../components/landing/HowItWorks'
 import { Features } from '../components/landing/Features'
 import { CylinderRange } from '../components/landing/CylinderRange'
+import { ForBusiness } from '../components/landing/ForBusiness'
 import { Market } from '../components/landing/Market'
 import { BusinessModel } from '../components/landing/BusinessModel'
 import { Compare } from '../components/landing/Compare'
@@ -25,9 +26,10 @@ export default function Landing() {
         <HowItWorks />
         <Features />
         <CylinderRange />
+        <ForBusiness />
+        <Compare />
         <Market />
         <BusinessModel />
-        <Compare />
         <Roadmap />
         <Testimonials />
         <CtaBanner />

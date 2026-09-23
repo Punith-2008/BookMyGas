@@ -10,13 +10,16 @@ interface VariantSpec {
   radius: number
   label: string
   textColor: string
+  /** Overall scale so tall cylinders still fit the frame. */
+  scale: number
 }
 
 const SPECS: Record<CylinderVariant, VariantSpec> = {
-  domestic14: { color: '#D7261E', height: 2.2, radius: 1, label: 'LPG · 14.2 kg', textColor: '#0B1F3A' },
-  domestic5: { color: '#D7261E', height: 1.3, radius: 0.8, label: 'LPG · 5 kg', textColor: '#0B1F3A' },
-  ftl5: { color: '#C9D1DB', height: 1.3, radius: 0.8, label: 'FTL · 5 kg', textColor: '#0B1F3A' },
-  commercial19: { color: '#1F4FA3', height: 2.6, radius: 1, label: 'LPG · 19 kg', textColor: '#0B1F3A' },
+  domestic14: { color: '#D7261E', height: 2.2, radius: 1, label: 'LPG · 14.2 kg', textColor: '#0B1F3A', scale: 1 },
+  domestic5: { color: '#D7261E', height: 1.3, radius: 0.8, label: 'LPG · 5 kg', textColor: '#0B1F3A', scale: 1 },
+  ftl5: { color: '#C9D1DB', height: 1.3, radius: 0.8, label: 'FTL · 5 kg', textColor: '#0B1F3A', scale: 1 },
+  commercial19: { color: '#1F4FA3', height: 2.6, radius: 1, label: 'LPG · 19 kg', textColor: '#0B1F3A', scale: 0.95 },
+  commercial47: { color: '#1F4FA3', height: 3, radius: 1.2, label: 'LPG · 47.5 kg', textColor: '#0B1F3A', scale: 0.8 },
 }
 
 /** Lathe profile for an LPG cylinder body: flat base, straight wall, domed shoulder. */
@@ -85,7 +88,7 @@ function CylinderModel({ variant }: { variant: CylinderVariant }) {
   useFrame((state, delta) => {
     if (bodyMat.current) bodyMat.current.color.lerp(targetColor, Math.min(1, delta * 6))
     if (group.current) {
-      const s = THREE.MathUtils.lerp(group.current.scale.x, 1, Math.min(1, delta * 5))
+      const s = THREE.MathUtils.lerp(group.current.scale.x, spec.scale, Math.min(1, delta * 5))
       group.current.scale.setScalar(s)
     }
     if (flame.current) {
@@ -96,7 +99,7 @@ function CylinderModel({ variant }: { variant: CylinderVariant }) {
 
   // "Pop" when the variant changes.
   useEffect(() => {
-    group.current?.scale.setScalar(0.82)
+    group.current?.scale.setScalar(spec.scale * 0.82)
   }, [variant])
 
   const half = spec.height / 2

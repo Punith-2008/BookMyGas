@@ -32,3 +32,30 @@ export const LAST_REFILL_DAYS = { eligible: 28, notEligible: 5 }
 
 /** Illustrative minimum gap between refill bookings. Verify against current IOCL norms. */
 export const REFILL_INTERVAL_DAYS = 15
+
+export interface BusinessAccount {
+  businessName: string
+  contactPerson: string
+  gstin: string
+  commercialConsumerNo: string
+  category: string
+  distributor: string
+  distributorCode: string
+  registeredMobile: string
+  address: string
+  city: string
+}
+
+/** Sample commercial (non-domestic) account used in the business demo flow. */
+export const SAMPLE_BUSINESS: BusinessAccount = {
+  businessName: 'Miyapur Food Court',
+  contactPerson: SAMPLE_CONNECTION.consumerName,
+  gstin: '36ABCDE1234F1Z5',
+  commercialConsumerNo: 'C-300871',
+  category: 'Restaurant / Food service',
+  distributor: SAMPLE_CONNECTION.distributor,
+  distributorCode: SAMPLE_CONNECTION.distributorCode,
+  registeredMobile: SAMPLE_CONNECTION.registeredMobile,
+  address: SAMPLE_CONNECTION.address,
+  city: SAMPLE_CONNECTION.city,
+}

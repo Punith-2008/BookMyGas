@@ -1,6 +1,6 @@
 import { Minus, Plus } from 'lucide-react'
 import { CylinderIllustration } from '../brand/CylinderIllustration'
-import { CYLINDERS, getCylinder } from '../../data/cylinders'
+import { HOUSEHOLD_CYLINDERS } from '../../data/cylinders'
 import { SAMPLE_CONNECTION } from '../../data/connection'
 import { priceBreakdown, type BookingDispatch, type BookingState } from '../../hooks/useBooking'
 import { formatINR } from '../../lib/format'
@@ -14,7 +14,6 @@ interface StepCylinderProps {
 
 export function StepCylinder({ state, dispatch, maxQty }: StepCylinderProps) {
   const price = priceBreakdown(state)
-  const selected = getCylinder(state.cylinder)
 
   return (
     <div className="space-y-4">
@@ -24,7 +23,7 @@ export function StepCylinder({ state, dispatch, maxQty }: StepCylinderProps) {
       </div>
 
       <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Cylinder type">
-        {CYLINDERS.map((c) => {
+        {HOUSEHOLD_CYLINDERS.map((c) => {
           const active = c.id === state.cylinder
           return (
             <button
@@ -56,7 +55,7 @@ export function StepCylinder({ state, dispatch, maxQty }: StepCylinderProps) {
         <div>
           <p className="text-sm font-bold">Quantity</p>
           <p className="text-xs text-slate-500">
-            Max {maxQty} for {selected.category === 'Commercial' ? 'commercial' : SAMPLE_CONNECTION.connectionType}
+            Max {maxQty} for your {SAMPLE_CONNECTION.connectionType} connection
           </p>
         </div>
         <div className="flex items-center gap-3">

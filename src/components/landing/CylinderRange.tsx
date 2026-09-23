@@ -12,10 +12,10 @@ export function CylinderRange() {
         <SectionHeading
           eyebrow="The Indane range"
           title="Every Indane cylinder, one app"
-          subtitle="From the everyday 14.2 kg kitchen refill to the 19 kg commercial cylinder for restaurants."
+          subtitle="From the everyday 14.2 kg kitchen refill to 19 kg and 47.5 kg commercial cylinders for businesses."
         />
 
-        <div className="grid grid-cols-2 items-end gap-x-4 gap-y-12 md:grid-cols-4">
+        <div className="grid grid-cols-2 items-end gap-x-4 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">
           {CYLINDERS.map((c, i) => (
             <motion.div
               key={c.id}

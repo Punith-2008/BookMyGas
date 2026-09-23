@@ -216,6 +216,21 @@ Logo, tagline, contact email (hello@bookmygas.in placeholder), social icons, the
 
 All prices are illustrative, and the UI footer says so: *"Prices shown are indicative. Actual RSP varies by city and month."*
 
+### 7.5 Business: Bulk Commercial Orders
+
+A **Household | Business · Bulk** switch at the top of the phone screen changes the flow. The landing page's **For Business** section links straight to it (`/demo?mode=business`).
+
+| Step | Screen | Details |
+|------|--------|---------|
+| 1 | **Commercial account** | Business name, contact person, **GSTIN**, **Commercial Consumer No.**, distributor. No refill interval applies to commercial LPG. |
+| 2 | **Bulk order** | Mix **19 kg** (max 100) and **47.5 kg** (max 50) commercial cylinders. Quick picks 5 / 10 / 25 / 50. **Volume discounts** (illustrative): 2% at 10+, 4% at 25+, 6% at 50+. |
+| 3 | **Business address** | The registered business address, delivered in a single drop. |
+| 4 | **Delivery schedule** | First delivery slot, plus **repeat**: one-time, weekly, fortnightly or monthly. |
+| 5 | **Review and pay** | Line items, volume discount, an 18% GST figure for input tax credit. Net banking, UPI, card or cash on delivery. |
+| 6 | **Bulk order confirmed** | Reference `BMG-B-2026-XXXXX`, DAC, schedule, and a printable **GST tax invoice** (taxable value, CGST 9% and SGST 9%). |
+
+The household flow now offers only household cylinders (14.2 kg, 5 kg, 5 kg FTL). Commercial cylinders are ordered through the business flow.
+
 ---
 
 ## 8. Project Structure
