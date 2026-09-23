@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="g" cx="75%" cy="45%" r="60%"><stop offset="0" stop-color="#FF6B1A" stop-opacity=".45"/><stop offset="1" stop-color="#0B1F3A" stop-opacity="0"/></radialGradient>
+    <linearGradient id="c" x1="0" x2="1"><stop offset="0" stop-color="#9E1812"/><stop offset=".35" stop-color="#F0463D"/><stop offset="1" stop-color="#9E1812"/></linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0B1F3A"/>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <text x="90" y="250" font-family="Poppins, Arial, sans-serif" font-size="88" font-weight="800" fill="#fff">BookMyGas</text>
+  <text x="90" y="330" font-family="Poppins, Arial, sans-serif" font-size="48" font-weight="700" fill="#FF6B1A">Book. Track. Cook.</text>
+  <text x="90" y="400" font-family="Inter, Arial, sans-serif" font-size="30" fill="#CBD5E1">Indane LPG refill booking in 30 seconds</text>
+  <g transform="translate(860 120)">
+    <path d="M100 0c22 26 34 42 34 60a34 34 0 0 1-68 0c0-18 12-34 34-60z" fill="#FF6B1A"/>
+    <rect x="80" y="100" width="40" height="26" rx="6" fill="#C9A227"/>
+    <path d="M20 190c0-40 35-64 80-64s80 24 80 64v180a20 20 0 0 1-20 20H40a20 20 0 0 1-20-20z" fill="url(#c)"/>
+    <rect x="20" y="230" width="160" height="60" fill="#fff" opacity=".95"/>
+    <text x="100" y="270" text-anchor="middle" font-family="Poppins, Arial" font-size="26" font-weight="700" fill="#0B1F3A">LPG 14.2 kg</text>
+  </g>
+</svg>
