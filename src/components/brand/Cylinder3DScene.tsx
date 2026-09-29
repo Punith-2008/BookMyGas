@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { ContactShadows, Environment, Float, Lightformer, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
-import type { CylinderVariant } from '../../data/cylinders'
+import type { CylinderLook } from '../../data/cylinders'
 
 interface VariantSpec {
   color: string
@@ -14,12 +14,13 @@ interface VariantSpec {
   scale: number
 }
 
-const SPECS: Record<CylinderVariant, VariantSpec> = {
+const SPECS: Record<CylinderLook, VariantSpec> = {
   domestic14: { color: '#D7261E', height: 2.2, radius: 1, label: 'LPG · 14.2 kg', textColor: '#0B1F3A', scale: 1 },
-  domestic5: { color: '#D7261E', height: 1.3, radius: 0.8, label: 'LPG · 5 kg', textColor: '#0B1F3A', scale: 1 },
+  xtralite10: { color: '#F59E0B', height: 1.8, radius: 0.9, label: 'Xtralite · 10 kg', textColor: '#0B1F3A', scale: 1 },
   ftl5: { color: '#C9D1DB', height: 1.3, radius: 0.8, label: 'FTL · 5 kg', textColor: '#0B1F3A', scale: 1 },
   commercial19: { color: '#1F4FA3', height: 2.6, radius: 1, label: 'LPG · 19 kg', textColor: '#0B1F3A', scale: 0.95 },
   commercial47: { color: '#1F4FA3', height: 3, radius: 1.2, label: 'LPG · 47.5 kg', textColor: '#0B1F3A', scale: 0.8 },
+  commercial425: { color: '#1F4FA3', height: 3.4, radius: 1.5, label: 'LPG · 425 kg', textColor: '#0B1F3A', scale: 0.68 },
 }
 
 /** Lathe profile for an LPG cylinder body: flat base, straight wall, domed shoulder. */
@@ -73,7 +74,7 @@ function makeLabelTexture(label: string, textColor: string) {
   return tex
 }
 
-function CylinderModel({ variant }: { variant: CylinderVariant }) {
+function CylinderModel({ variant }: { variant: CylinderLook }) {
   const spec = SPECS[variant]
   const group = useRef<THREE.Group>(null)
   const bodyMat = useRef<THREE.MeshPhysicalMaterial>(null)
@@ -150,7 +151,7 @@ function CylinderModel({ variant }: { variant: CylinderVariant }) {
   )
 }
 
-export default function Cylinder3DScene({ variant, interactive }: { variant: CylinderVariant; interactive: boolean }) {
+export default function Cylinder3DScene({ variant, interactive }: { variant: CylinderLook; interactive: boolean }) {
   return (
     <Canvas dpr={[1, 2]} camera={{ position: [0, 0.8, 6.2], fov: 35 }} gl={{ antialias: true, alpha: true }}>
       <ambientLight intensity={0.5} />

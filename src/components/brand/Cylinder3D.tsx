@@ -1,12 +1,12 @@
 import { lazy, Suspense } from 'react'
-import type { CylinderVariant } from '../../data/cylinders'
+import type { CylinderLook } from '../../data/cylinders'
 import { useCan3D } from '../../hooks/useCan3D'
 import { CylinderIllustration } from './CylinderIllustration'
 
 const Scene = lazy(() => import('./Cylinder3DScene'))
 
 interface Cylinder3DProps {
-  variant?: CylinderVariant
+  variant?: CylinderLook
   className?: string
   interactive?: boolean
 }

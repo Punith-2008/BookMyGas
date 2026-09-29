@@ -16,7 +16,7 @@ export function StepBulkOrder({ state, dispatch }: { state: BookingState; dispat
     <div className="space-y-4">
       <div>
         <h2 className="text-xl font-extrabold">Bulk order</h2>
-        <p className="text-sm text-slate-500">Mix cylinder types in one order. Illustrative RSP, incl. 18% GST.</p>
+        <p className="text-sm text-slate-500">Mix cylinder types in one order. IOCL MRP, Hyderabad, incl. 18% GST.</p>
       </div>
 
       {BUSINESS_CYLINDERS.map((c) => {
@@ -26,7 +26,7 @@ export function StepBulkOrder({ state, dispatch }: { state: BookingState; dispat
           <div key={c.id} className={`rounded-2xl bg-white p-4 shadow-card ${qty > 0 ? 'ring-2 ring-flame-500' : ''}`}>
             <div className="flex items-center gap-3">
               <div className="flex h-16 w-10 shrink-0 items-end justify-center">
-                <CylinderIllustration variant={c.id} className="h-auto max-h-16 w-9" />
+                <CylinderIllustration variant={c.look} className="h-auto max-h-16 w-9" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold">{c.name}</p>
@@ -116,7 +116,7 @@ export function StepBulkOrder({ state, dispatch }: { state: BookingState; dispat
         <AnimatedINR value={price.total} className="font-heading text-xl font-extrabold" />
       </div>
       <p className="text-[0.65rem] text-slate-400">
-        *Illustrative prices and discounts. Actual commercial RSP and discounts vary by city, month and distributor.
+        *IOCL MRP for Hyderabad, September 2026. Volume discounts are illustrative and vary by distributor.
       </p>
     </div>
   )

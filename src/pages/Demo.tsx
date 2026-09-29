@@ -119,6 +119,7 @@ export default function Demo() {
     <StepConfirmed key="d" state={state} celebrate={celebrate} onOpenMemo={() => setMemoOpen(true)} onBookAnother={reset} />,
   ][state.step]
 
+  const barAmount = business || state.step === PAY_STEP ? price.total : price.subtotal
   let nextLabel = 'Continue'
   if (state.step === 0) nextLabel = blocked ? 'Not eligible yet' : business ? 'Start bulk order' : 'Book Refill'
   if (state.step === 1 && blocked) nextLabel = 'Add cylinders'
@@ -207,8 +208,8 @@ export default function Demo() {
                     <p className="truncate text-slate-500">
                       {business ? `${price.totalQty} cylinders` : `${cyl.weight} × ${state.qty}`}
                     </p>
-                    <p className="font-heading text-base font-extrabold">
-                      {formatINR(business || state.step === PAY_STEP ? price.total : price.subtotal)}
+                    <p className={`whitespace-nowrap font-heading font-extrabold ${barAmount >= 10000 ? 'text-sm' : 'text-base'}`}>
+                      {formatINR(barAmount)}
                     </p>
                   </div>
                 )}
@@ -216,7 +217,7 @@ export default function Demo() {
                   type="button"
                   onClick={next}
                   disabled={blocked || processing}
-                  className={`inline-flex h-12 items-center justify-center gap-2 rounded-full bg-flame-500 px-6 font-heading text-sm font-bold text-white transition hover:bg-flame-600 disabled:cursor-not-allowed disabled:bg-slate-300 ${
+                  className={`inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-flame-500 px-4 font-heading text-sm font-bold text-white transition hover:bg-flame-600 disabled:cursor-not-allowed disabled:bg-slate-300 ${
                     state.step === 0 ? 'w-full' : ''
                   }`}
                 >
@@ -271,14 +272,14 @@ export default function Demo() {
         {/* selected cylinder in 3D (desktop) */}
         <div className="hidden flex-1 flex-col items-start justify-center lg:flex">
           <div className="w-full max-w-xs">
-            <Cylinder3D variant={state.cylinder} className="h-[380px] w-full" />
+            <Cylinder3D variant={cyl.look} className="h-[380px] w-full" />
             <p className="text-center font-heading text-lg font-bold text-white">{cyl.name}</p>
             <p className="text-center text-sm text-slate-400">{cyl.useCase}</p>
           </div>
         </div>
       </main>
 
-      <p className="relative pb-4 text-center text-[0.65rem] text-slate-500">Not an official IOCL product. Prices are illustrative.</p>
+      <p className="relative pb-4 text-center text-[0.65rem] text-slate-500">Not an official IOCL product. Prices: IOCL MRP, Hyderabad, September 2026.</p>
 
       {memoOpen && <CashMemo state={state} onClose={() => setMemoOpen(false)} />}
     </div>

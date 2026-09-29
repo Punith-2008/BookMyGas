@@ -1,5 +1,6 @@
 import { Building, CreditCard, IndianRupee, Info, Smartphone, Tag, TrendingDown } from 'lucide-react'
 import { SAMPLE_BUSINESS, SAMPLE_CONNECTION } from '../../data/connection'
+import { getCylinder } from '../../data/cylinders'
 import { DEMO_OFFER } from '../../data/offers'
 import { priceBreakdown, type BookingDispatch, type BookingState, type PaymentMethod } from '../../hooks/useBooking'
 import { formatINR } from '../../lib/format'
@@ -49,7 +50,7 @@ export function StepPayment({ state, dispatch }: { state: BookingState; dispatch
         {price.lines.map((l) => (
           <div key={l.cylinder} className="flex justify-between">
             <span className="text-slate-600">
-              {business ? `${l.name} (${l.qty} × ${formatINR(l.unit)})` : 'Refill RSP (incl. GST)'}
+              {business ? `${l.name} (${l.qty} × ${formatINR(l.unit)})` : getCylinder(l.cylinder).nc ? 'MRP (incl. GST)' : 'Refill MRP (incl. GST)'}
             </span>
             <span>{formatINR(l.amount)}</span>
           </div>

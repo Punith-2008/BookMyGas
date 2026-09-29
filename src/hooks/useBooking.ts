@@ -2,6 +2,7 @@ import { useEffect, useReducer } from 'react'
 import { SAMPLE_CONNECTION } from '../data/connection'
 import { BUSINESS_CYLINDERS, getCylinder, type CylinderVariant, type Segment } from '../data/cylinders'
 import { DEMO_OFFER, volumeTier } from '../data/offers'
+import { round2 } from '../lib/format'
 import { generateBookingRef, generateDac } from '../lib/ids'
 import type { TimeSlotId } from '../lib/slots'
 
@@ -144,7 +145,7 @@ export function priceBreakdown(state: BookingState) {
           name: c.name,
           qty: state.bulk[c.id]!,
           unit: c.price,
-          amount: c.price * state.bulk[c.id]!,
+          amount: round2(c.price * state.bulk[c.id]!),
         }))
       : [
           {
@@ -152,12 +153,12 @@ export function priceBreakdown(state: BookingState) {
             name: getCylinder(state.cylinder).name,
             qty: state.qty,
             unit: getCylinder(state.cylinder).price,
-            amount: getCylinder(state.cylinder).price * state.qty,
+            amount: round2(getCylinder(state.cylinder).price * state.qty),
           },
         ]
 
   const totalQty = lines.reduce((a, l) => a + l.qty, 0)
-  const subtotal = lines.reduce((a, l) => a + l.amount, 0)
+  const subtotal = round2(lines.reduce((a, l) => a + l.amount, 0))
   const tier = volumeTier(totalQty)
 
   let discount = 0
@@ -170,10 +171,12 @@ export function priceBreakdown(state: BookingState) {
     discountLabel = `Offer ${DEMO_OFFER.code}`
   }
 
-  const total = subtotal - discount
+  const total = round2(subtotal - discount)
   const gstRate = lines.length ? getCylinder(lines[0].cylinder).gstRate : 0.05
-  const taxable = Math.round(total / (1 + gstRate))
-  return { lines, totalQty, subtotal, delivery: 0, discount, discountLabel, total, gstRate, taxable, gst: total - taxable, tier }
+  const taxable = round2(total / (1 + gstRate))
+  const gst = round2(total - taxable)
+  const cgst = round2(gst / 2)
+  return { lines, totalQty, subtotal, delivery: 0, discount, discountLabel, total, gstRate, taxable, gst, cgst, tier }
 }
 
 function load(segment: Segment): BookingState {

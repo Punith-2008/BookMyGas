@@ -15,12 +15,12 @@ const STEPS = [
   {
     icon: CalendarClock,
     title: 'Choose cylinder and slot',
-    body: '14.2 kg, 5 kg, FTL or 19 kg commercial. Then pick a morning, afternoon or evening delivery window.',
+    body: '14.2 kg, 10 kg Xtralite, FTL or 19 kg commercial. Then pick a morning, afternoon or evening delivery window.',
   },
   {
     icon: CreditCard,
     title: 'Pay your way',
-    body: 'UPI, card or cash on delivery, with a clear RSP breakdown before you confirm.',
+    body: 'UPI, card or cash on delivery, with a clear MRP breakdown before you confirm.',
   },
   {
     icon: Truck,

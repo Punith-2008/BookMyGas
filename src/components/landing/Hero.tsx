@@ -25,7 +25,7 @@ function PhonePreview() {
             </span>
           </div>
           <div className="grid grid-cols-2 gap-1.5">
-            {['14.2 kg', '5 kg', 'FTL 5 kg', '19 kg'].map((w, i) => (
+            {['14.2 kg', '10 kg', 'FTL 5 kg', '19 kg'].map((w, i) => (
               <div
                 key={w}
                 className={`rounded-lg p-1.5 text-center text-[0.55rem] font-bold ${i === 0 ? 'bg-flame-500 text-white' : 'bg-white text-navy-900 shadow-card'}`}

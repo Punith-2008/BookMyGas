@@ -15,7 +15,7 @@ export const COMMENTARY: Record<Segment, Line[]> = {
     },
     {
       title: 'The household range',
-      body: '14.2 kg, 5 kg and FTL “Chhotu”. Quantity follows SBC/DBC rules automatically, so distributors get no invalid orders.',
+      body: 'Every cylinder in IOCL’s Hyderabad price list: domestic, FTL and commercial, including XtraTej and Nano Cut. Quantity follows SBC/DBC rules automatically, so distributors get no invalid orders.',
     },
     {
       title: 'Registered address only',
@@ -27,7 +27,7 @@ export const COMMENTARY: Record<Segment, Line[]> = {
     },
     {
       title: 'UPI-first checkout',
-      body: 'A transparent RSP breakdown, digital payment or cash on delivery. DBTL subsidy info is shown upfront.',
+      body: 'A transparent MRP breakdown, digital payment or cash on delivery. DBTL subsidy info is shown upfront.',
     },
     {
       title: 'DAC and digital cash memo',

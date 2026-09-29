@@ -57,7 +57,7 @@ export function Footer() {
             Indane and IndianOil are trademarks of Indian Oil Corporation Ltd. BookMyGas is an independent concept demo and not an
             official IOCL product.
           </p>
-          <p>Prices are illustrative, market figures are indicative, and testimonials are sample personas. Built for demo purposes.</p>
+          <p>Cylinder prices are IOCL MRPs for Hyderabad (September 2026). Volume discounts are illustrative and market figures are indicative. Built for demo purposes.</p>
           <p>© 2026 BookMyGas</p>
         </div>
       </div>

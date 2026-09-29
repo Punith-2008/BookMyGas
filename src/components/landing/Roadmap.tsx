@@ -19,7 +19,7 @@ export function Roadmap() {
   const truckLeft = useTransform(progress, [0, 1], ['0%', '100%'])
 
   return (
-    <section id="roadmap" className="section bg-white">
+    <section id="roadmap" className="section">
       <div className="container-x">
         <SectionHeading eyebrow="Traction & roadmap" title="The road ahead" />
 

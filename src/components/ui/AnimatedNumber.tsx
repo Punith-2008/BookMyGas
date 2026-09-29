@@ -8,7 +8,7 @@ export function AnimatedINR({ value, className = '' }: { value: number; classNam
   const prev = useRef(value)
 
   useEffect(() => {
-    const controls = animate(prev.current, value, { duration: 0.5, ease: 'easeOut', onUpdate: (v) => setDisplay(Math.round(v)) })
+    const controls = animate(prev.current, value, { duration: 0.5, ease: 'easeOut', onUpdate: (v) => setDisplay(Math.round(v * 100) / 100) })
     prev.current = value
     return () => controls.stop()
   }, [value])

@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import type { CylinderVariant } from '../../data/cylinders'
+import type { CylinderLook } from '../../data/cylinders'
 
 interface Palette {
   dark: string
@@ -8,34 +8,37 @@ interface Palette {
   text: string
 }
 
-const PALETTES: Record<CylinderVariant | 'empty', Palette> = {
+const PALETTES: Record<CylinderLook | 'empty', Palette> = {
   domestic14: { dark: '#9E1812', mid: '#D7261E', light: '#F4665E', text: '#0B1F3A' },
-  domestic5: { dark: '#9E1812', mid: '#D7261E', light: '#F4665E', text: '#0B1F3A' },
+  xtralite10: { dark: '#B45309', mid: '#F59E0B', light: '#FDE68A', text: '#0B1F3A' },
   ftl5: { dark: '#8A96A6', mid: '#C9D1DB', light: '#F3F6FA', text: '#0B1F3A' },
   commercial19: { dark: '#143670', mid: '#1F4FA3', light: '#5C88D6', text: '#0B1F3A' },
   commercial47: { dark: '#143670', mid: '#1F4FA3', light: '#5C88D6', text: '#0B1F3A' },
+  commercial425: { dark: '#143670', mid: '#1F4FA3', light: '#5C88D6', text: '#0B1F3A' },
   empty: { dark: '#7C8594', mid: '#A3ACB9', light: '#CDD3DC', text: '#64748B' },
 }
 
 /** Body height (in viewBox units) per variant, which gives realistic relative sizes. */
-const BODY_HEIGHT: Record<CylinderVariant, number> = {
+const BODY_HEIGHT: Record<CylinderLook, number> = {
   domestic14: 150,
-  domestic5: 96,
+  xtralite10: 124,
   ftl5: 96,
   commercial19: 176,
   commercial47: 214,
+  commercial425: 250,
 }
 
-const LABEL: Record<CylinderVariant, string> = {
+const LABEL: Record<CylinderLook, string> = {
   domestic14: '14.2 kg',
-  domestic5: '5 kg',
+  xtralite10: '10 kg',
   ftl5: 'FTL 5 kg',
   commercial19: '19 kg',
   commercial47: '47.5 kg',
+  commercial425: '425 kg',
 }
 
 interface CylinderIllustrationProps {
-  variant?: CylinderVariant
+  variant?: CylinderLook
   mood?: 'normal' | 'happy' | 'empty'
   className?: string
   title?: string

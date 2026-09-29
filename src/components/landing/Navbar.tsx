@@ -1,18 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Menu, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { CylinderLogo } from '../brand/CylinderLogo'
 import { DemoLink } from '../ui/DemoLink'
 
-const LINKS = [
-  { href: '#problem', label: 'Problem' },
+export interface NavLinkItem {
+  href: string
+  label: string
+}
+
+export const LANDING_LINKS: NavLinkItem[] = [
   { href: '#how-it-works', label: 'How it Works' },
+  { href: '#docs', label: 'Prices' },
   { href: '#business', label: 'For Business' },
-  { href: '#market', label: 'Market' },
-  { href: '#business-model', label: 'Business Model' },
+  { href: '#compare', label: 'Why BookMyGas' },
+  { href: '/pitch', label: 'Pitch' },
 ]
 
-export function Navbar() {
+/** Hash links scroll within the page; paths like "/pitch" are router links. */
+function NavLink({ href, className, onClick, children, label }: { href: string; className?: string; onClick?: () => void; children: ReactNode; label?: string }) {
+  return href.startsWith('/') ? (
+    <Link to={href} className={className} onClick={onClick} aria-label={label}>
+      {children}
+    </Link>
+  ) : (
+    <a href={href} className={className} onClick={onClick} aria-label={label}>
+      {children}
+    </a>
+  )
+}
+
+export function Navbar({ links = LANDING_LINKS, home = '#top' }: { links?: NavLinkItem[]; home?: string }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -30,16 +49,16 @@ export function Navbar() {
       }`}
     >
       <nav className="container-x flex h-16 items-center justify-between" aria-label="Main">
-        <a href="#top" aria-label="BookMyGas home">
+        <NavLink href={home} label="BookMyGas home">
           <CylinderLogo />
-        </a>
+        </NavLink>
 
         <ul className="hidden items-center gap-7 lg:flex">
-          {LINKS.map((l) => (
+          {links.map((l) => (
             <li key={l.href}>
-              <a href={l.href} className="text-sm font-semibold text-navy-900/80 transition-colors hover:text-flame-600">
+              <NavLink href={l.href} className="text-sm font-semibold text-navy-900/80 transition-colors hover:text-flame-600">
                 {l.label}
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>
@@ -69,15 +88,15 @@ export function Navbar() {
             className="overflow-hidden border-t border-navy-900/5 lg:hidden"
           >
             <ul className="container-x flex flex-col gap-1 py-4">
-              {LINKS.map((l) => (
+              {links.map((l) => (
                 <li key={l.href}>
-                  <a
+                  <NavLink
                     href={l.href}
                     onClick={() => setOpen(false)}
                     className="block rounded-lg px-3 py-3 font-semibold text-navy-900 hover:bg-flame-50"
                   >
                     {l.label}
-                  </a>
+                  </NavLink>
                 </li>
               ))}
               <li className="pt-2">
