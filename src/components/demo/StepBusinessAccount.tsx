@@ -44,12 +44,12 @@ export function StepBusinessAccount() {
         <BadgeCheck className="h-4 w-4" /> Bulk ordering enabled
       </Sticker>
 
-      <div className="flex flex-wrap gap-2 text-xs font-semibold">
+      <div className="flex flex-col items-start gap-2 text-xs font-semibold">
         <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 shadow-card">
-          <FileText className="h-3.5 w-3.5 text-navy-600" /> GST invoice with ITC
+          <FileText className="h-3.5 w-3.5 text-navy-600" /> GST invoice
         </span>
         <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 shadow-card">
-          <Repeat className="h-3.5 w-3.5 text-navy-600" /> Recurring deliveries
+          <Repeat className="h-3.5 w-3.5 text-navy-600" /> Recurring orders
         </span>
       </div>
     </div>

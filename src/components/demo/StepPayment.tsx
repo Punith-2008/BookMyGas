@@ -19,7 +19,7 @@ export function StepPayment({ state, dispatch }: { state: BookingState; dispatch
   const price = priceBreakdown(state)
   const date = nextDates()[state.dateIndex]
   const slot = TIME_SLOTS.find((s) => s.id === state.slot)!
-  const gstPct = Math.round(price.gstRate * 100)
+  const gstPct = price.gstRate === null ? '5% / 18%' : `${Math.round(price.gstRate * 100)}%`
 
   return (
     <div className="space-y-4">
@@ -89,7 +89,7 @@ export function StepPayment({ state, dispatch }: { state: BookingState; dispatch
         </div>
         {business && (
           <p className="flex justify-between text-xs text-slate-500">
-            <span>Includes GST ({gstPct}%), claimable as ITC</span>
+            <span>Includes GST ({gstPct}), claimable as ITC</span>
             <span>{formatINR(price.gst)}</span>
           </p>
         )}

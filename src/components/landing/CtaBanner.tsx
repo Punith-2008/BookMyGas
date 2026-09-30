@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { CylinderIllustration } from '../brand/CylinderIllustration'
 import { DemoLink } from '../ui/DemoLink'
 
 export function CtaBanner() {
@@ -25,7 +24,7 @@ export function CtaBanner() {
             transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 2.4 }}
             aria-hidden="true"
           >
-            <CylinderIllustration mood="happy" className="h-48 sm:h-56" />
+            <img src="/mascot-cylinder.png" alt="" draggable={false} className="h-56 w-auto select-none drop-shadow-[0_0_40px_rgba(255,106,26,0.45)] sm:h-64" />
           </motion.div>
         </div>
       </div>

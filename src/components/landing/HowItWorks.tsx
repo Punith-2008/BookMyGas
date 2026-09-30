@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
 import { CalendarClock, CreditCard, IdCard, Truck } from 'lucide-react'
-import { CylinderIllustration } from '../brand/CylinderIllustration'
 import { Sticker } from '../brand/Sticker'
 import { Reveal } from '../ui/Reveal'
 import { SectionHeading } from '../ui/SectionHeading'
@@ -10,21 +9,25 @@ const STEPS = [
   {
     icon: IdCard,
     title: 'Confirm your Indane connection',
+    mascot: '/mascots/confirm.png',
     body: 'Consumer number, LPG ID and distributor are already linked, and refill eligibility is checked instantly.',
   },
   {
     icon: CalendarClock,
     title: 'Choose cylinder and slot',
+    mascot: '/mascots/choose.png',
     body: '14.2 kg, 10 kg Xtralite, FTL or 19 kg commercial. Then pick a morning, afternoon or evening delivery window.',
   },
   {
     icon: CreditCard,
     title: 'Pay your way',
+    mascot: '/mascots/pay.png',
     body: 'UPI, card or cash on delivery, with a clear MRP breakdown before you confirm.',
   },
   {
     icon: Truck,
     title: 'Share DAC, get cash memo',
+    mascot: '/mascots/memo.png',
     body: 'Give the delivery person your DAC at the door and get a digital cash memo instantly.',
   },
 ]
@@ -62,12 +65,8 @@ export function HowItWorks() {
                     </span>
                   </span>
                   <div className="relative flex-1 rounded-3xl bg-white p-5 shadow-card">
-                    <CylinderIllustration
-                      variant={i === 1 ? 'commercial19' : 'domestic14'}
-                      mood={i === 3 ? 'happy' : 'normal'}
-                      className="absolute -top-6 right-4 h-16 opacity-90"
-                    />
-                    <h3 className="pr-12 text-lg font-bold">{s.title}</h3>
+                    <img src={s.mascot} alt="" aria-hidden="true" loading="lazy" className="absolute -top-8 right-3 h-20 w-auto" />
+                    <h3 className="pr-20 text-lg font-bold">{s.title}</h3>
                     <p className="mt-2 text-sm text-slate-600">{s.body}</p>
                     {i === 3 && (
                       <Sticker tone="mint" rotate={-5} className="mt-4 text-xs">

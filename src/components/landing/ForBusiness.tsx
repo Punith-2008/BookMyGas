@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { FileText, Layers, Repeat, TrendingDown } from 'lucide-react'
-import { CylinderIllustration } from '../brand/CylinderIllustration'
 import { Sticker } from '../brand/Sticker'
 import { DemoLink } from '../ui/DemoLink'
 import { Reveal } from '../ui/Reveal'
@@ -10,7 +9,7 @@ const POINTS = [
   {
     icon: Layers,
     title: 'Bulk orders in one go',
-    body: 'Order 5, 25 or 100 cylinders at once, and mix 19 kg and 47.5 kg commercial cylinders in one order.',
+    body: 'Order 5, 25 or 100 cylinders at once, and mix any Indane cylinder in one order.',
   },
   {
     icon: TrendingDown,
@@ -25,7 +24,7 @@ const POINTS = [
   {
     icon: FileText,
     title: 'GST tax invoices',
-    body: 'Every order is billed to your GSTIN with an 18% GST breakdown, ready for input tax credit.',
+    body: 'Every order is billed to your GSTIN with a full GST breakdown, ready for input tax credit.',
   },
 ]
 
@@ -77,28 +76,34 @@ export function ForBusiness() {
           </DemoLink>
         </div>
 
-        {/* visual: stacked commercial cylinders + tier card */}
-        <div className="relative mx-auto w-full max-w-md">
-          <div className="flex items-end justify-center gap-1" aria-hidden="true">
-            {(['commercial19', 'commercial47', 'commercial19', 'commercial47', 'commercial19'] as const).map((v, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, type: 'spring', stiffness: 90 }}
-              >
-                <CylinderIllustration variant={v} className={v === 'commercial47' ? 'h-56 w-auto sm:h-64' : 'h-44 w-auto sm:h-52'} />
-              </motion.div>
-            ))}
+        {/* visual: Indane cylinder lineup + tier card */}
+        <div className="relative mx-auto w-full max-w-xl">
+          <motion.img
+            src="/cylinder-lineup.jpg"
+            alt="Indane cylinders: 14.2 kg domestic, 19 kg commercial, 47.5 kg VOT commercial, 5 kg FTL and 10 kg Xtralite Now"
+            loading="lazy"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: 'spring', stiffness: 80 }}
+            className="w-full"
+            style={{
+              // Feather the photo's edges into the section so the cylinders sit on the page, not in a box.
+              maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent), linear-gradient(to bottom, transparent, black 5%, black 95%, transparent)',
+              maskComposite: 'intersect',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent), linear-gradient(to bottom, transparent, black 5%, black 95%, transparent)',
+              WebkitMaskComposite: 'source-in',
+            }}
+          />
+
+          {/* Sticker is itself position: relative, so an absolute wrapper places it. */}
+          <div className="absolute -right-2 -top-12 z-10 w-24 sm:w-28">
+            <Sticker shape="burst" tone="amber" rotate={10} delay={0.6}>
+              Up to {Math.round(VOLUME_TIERS[VOLUME_TIERS.length - 1].pct * 100)}% off bulk
+            </Sticker>
           </div>
-          <div className="mx-auto mt-2 h-3 w-4/5 rounded-full bg-black/40 blur-md" aria-hidden="true" />
 
-          <Sticker shape="burst" tone="amber" rotate={10} delay={0.6} className="absolute -top-6 right-0 w-28">
-            Up to {Math.round(VOLUME_TIERS[VOLUME_TIERS.length - 1].pct * 100)}% off bulk
-          </Sticker>
-
-          <div className="relative -mt-6 rounded-2xl bg-white p-5 shadow-2xl">
+          <div className="relative mt-4 rounded-2xl bg-white p-5 shadow-2xl">
             <p className="text-sm font-bold text-navy-900">Volume discounts (illustrative)</p>
             <div className="mt-3 grid grid-cols-3 gap-2 text-center">
               {VOLUME_TIERS.map((t) => (

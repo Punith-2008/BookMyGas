@@ -68,8 +68,8 @@ const businessInitial: BookingState = {
   ...householdInitial,
   segment: 'business',
   cylinder: 'commercial19',
-  // Sensible bulk defaults so a presenter can click straight through.
-  bulk: { commercial19: 10, commercial47: 2 },
+  // The cart starts empty; the order can't continue until at least one cylinder is added.
+  bulk: {},
   frequency: 'weekly',
   payment: 'netbanking',
   offerApplied: false,
@@ -100,8 +100,7 @@ function reducer(state: BookingState, action: Action): BookingState {
     case 'setQty':
       return { ...state, qty: Math.max(1, Math.min(action.qty, householdMax(state.cylinder))) }
     case 'setBulkQty': {
-      const max = getCylinder(action.cylinder).maxQty.bulk
-      const qty = Math.max(0, Math.min(Math.round(action.qty) || 0, max))
+      const qty = Math.max(0, Math.round(action.qty) || 0)
       return { ...state, cylinder: action.cylinder, bulk: { ...state.bulk, [action.cylinder]: qty } }
     }
     case 'setFrequency':
@@ -172,9 +171,15 @@ export function priceBreakdown(state: BookingState) {
   }
 
   const total = round2(subtotal - discount)
-  const gstRate = lines.length ? getCylinder(lines[0].cylinder).gstRate : 0.05
-  const taxable = round2(total / (1 + gstRate))
-  const gst = round2(total - taxable)
+  // Domestic cylinders carry 5% GST and commercial 18%, so tax each line on its share of the discounted total.
+  const rates = [...new Set(lines.map((l) => getCylinder(l.cylinder).gstRate))]
+  const gstRate: number | null = rates.length > 1 ? null : (rates[0] ?? 0.05)
+  const netShare = subtotal ? total / subtotal : 0
+  const gst = round2(lines.reduce((a, l) => {
+    const r = getCylinder(l.cylinder).gstRate
+    return a + (l.amount * netShare * r) / (1 + r)
+  }, 0))
+  const taxable = round2(total - gst)
   const cgst = round2(gst / 2)
   return { lines, totalQty, subtotal, delivery: 0, discount, discountLabel, total, gstRate, taxable, gst, cgst, tier }
 }
@@ -203,7 +208,7 @@ export function useBooking(segment: Segment) {
     }
   }, [state])
 
-  const maxQty = state.segment === 'household' ? householdMax(state.cylinder) : getCylinder(state.cylinder).maxQty.bulk
+  const maxQty = state.segment === 'household' ? householdMax(state.cylinder) : Infinity
   return { state, dispatch, maxQty }
 }
 

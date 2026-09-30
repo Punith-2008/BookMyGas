@@ -41,7 +41,7 @@ export const COMMENTARY: Record<Segment, Line[]> = {
     },
     {
       title: 'Bulk in one go',
-      body: 'Mix 19 kg and 47.5 kg cylinders in a single order. Volume discounts unlock automatically at 10, 25 and 50 cylinders.',
+      body: 'Mix any Indane cylinder in a single order, in any quantity. Volume discounts unlock automatically at 10, 25 and 50 cylinders.',
     },
     {
       title: 'Delivered to the business',
@@ -53,7 +53,7 @@ export const COMMENTARY: Record<Segment, Line[]> = {
     },
     {
       title: 'Business-grade checkout',
-      body: 'Net banking, UPI or card, with an 18% GST breakdown for input tax credit and the volume discount applied upfront.',
+      body: 'Net banking, UPI or card, with a GST breakdown for input tax credit and the volume discount applied upfront.',
     },
     {
       title: 'GST tax invoice',

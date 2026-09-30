@@ -210,6 +210,7 @@ export const CYLINDERS: Cylinder[] = [
 
 /** The household picker lists every cylinder in the IOCL circular. */
 export const HOUSEHOLD_CYLINDERS = CYLINDERS
-export const BUSINESS_CYLINDERS = CYLINDERS.filter((c) => c.maxQty.bulk > 0)
+/** Bulk orders can mix any cylinder in the circular, with no per-order cap. */
+export const BUSINESS_CYLINDERS = CYLINDERS
 
 export const getCylinder = (id: CylinderVariant) => CYLINDERS.find((c) => c.id === id)!

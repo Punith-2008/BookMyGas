@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowDown, BadgeCheck, Flame } from 'lucide-react'
-import { Cylinder3D } from '../brand/Cylinder3D'
+import { IndaneCylinder3D } from '../brand/IndaneCylinder3D'
 import { Sticker } from '../brand/Sticker'
 import { DemoLink } from '../ui/DemoLink'
 import { SAMPLE_CONNECTION } from '../../data/connection'
@@ -112,7 +112,7 @@ export function Hero() {
         {/* visual: 3D cylinder + phone */}
         <div className="relative mx-auto h-[440px] w-full max-w-[520px] sm:h-[520px]">
           <div className="absolute inset-y-0 left-0 w-[64%]">
-            <Cylinder3D className="h-full w-full" />
+            <IndaneCylinder3D className="h-full w-full" />
           </div>
           <motion.div
             initial={{ opacity: 0, x: 40 }}

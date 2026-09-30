@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import Landing from './pages/Landing'
-import Pitch from './pages/Pitch'
 import NotFound from './pages/NotFound'
 import { CylinderLoader } from './components/brand/CylinderLoader'
 
@@ -17,7 +16,7 @@ function DemoFallback() {
 
 export const router = createBrowserRouter([
   { path: '/', element: <Landing /> },
-  { path: '/pitch', element: <Pitch /> },
+  // Pitch page (src/pages/Pitch.tsx) is disabled for now. Re-add { path: '/pitch', element: <Pitch /> } to bring it back.
   {
     path: '/demo',
     element: (

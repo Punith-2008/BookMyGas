@@ -15,7 +15,7 @@ export function CashMemo({ state, onClose }: { state: BookingState; onClose: () 
   const closeRef = useRef<HTMLButtonElement>(null)
   const business = state.segment === 'business'
   const price = priceBreakdown(state)
-  const gstPct = price.gstRate * 100
+  const gstPct = price.gstRate === null ? null : price.gstRate * 100
   const date = nextDates()[state.dateIndex]
   const slot = TIME_SLOTS.find((s) => s.id === state.slot)!
   const c = SAMPLE_CONNECTION
@@ -144,11 +144,11 @@ export function CashMemo({ state, onClose }: { state: BookingState; onClose: () 
                 <td className="pt-2 text-right text-slate-500">{formatINR(price.taxable)}</td>
               </tr>
               <tr>
-                <td className="text-slate-500">CGST ({gstPct / 2}%)</td>
+                <td className="text-slate-500">CGST{gstPct !== null && ` (${gstPct / 2}%)`}</td>
                 <td className="text-right text-slate-500">{formatINR(price.cgst)}</td>
               </tr>
               <tr>
-                <td className="text-slate-500">SGST ({gstPct / 2}%)</td>
+                <td className="text-slate-500">SGST{gstPct !== null && ` (${gstPct / 2}%)`}</td>
                 <td className="text-right text-slate-500">{formatINR(price.gst - price.cgst)}</td>
               </tr>
               <tr className="border-t border-navy-900/10 font-heading text-base font-bold">

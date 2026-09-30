@@ -15,7 +15,7 @@ export interface Connection {
 
 /** Fictional sample consumer. Any resemblance to a real connection is coincidental. */
 export const SAMPLE_CONNECTION: Connection = {
-  consumerName: 'Srinivas Sunakala',
+  consumerName: 'Srinivas',
   consumerNo: '100245',
   lpgId: '71234567890123456',
   distributor: 'Shree Sai Indane Gramin Vitrak',

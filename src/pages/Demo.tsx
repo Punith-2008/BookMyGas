@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Building2, Home, Lock } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Building2, Lock } from 'lucide-react'
 import { CylinderLoader } from '../components/brand/CylinderLoader'
-import { Cylinder3D } from '../components/brand/Cylinder3D'
+import { IndaneCylinder3D } from '../components/brand/IndaneCylinder3D'
 import { PhoneFrame } from '../components/demo/PhoneFrame'
 import { DemoTopBar } from '../components/demo/DemoTopBar'
 import { CommentaryPanel } from '../components/demo/CommentaryPanel'
@@ -19,22 +18,16 @@ import { SmsToast } from '../components/demo/SmsToast'
 import { CashMemo } from '../components/demo/CashMemo'
 import { STEP_LABELS } from '../data/commentary'
 import { SAMPLE_BUSINESS, SAMPLE_CONNECTION } from '../data/connection'
-import { getCylinder, type Segment } from '../data/cylinders'
+import { getCylinder } from '../data/cylinders'
 import { LAST_STEP, priceBreakdown, useBooking } from '../hooks/useBooking'
 import { formatINR } from '../lib/format'
 
 const PAY_STEP = LAST_STEP - 1
 const PROCESSING_MS = 1500
 
-const SEGMENTS: { id: Segment; label: string; icon: typeof Home }[] = [
-  { id: 'household', label: 'Household', icon: Home },
-  { id: 'business', label: 'Business · Bulk', icon: Building2 },
-]
-
 export default function Demo() {
-  const [params, setParams] = useSearchParams()
-  const initialSegment: Segment = params.get('mode') === 'business' ? 'business' : 'household'
-  const { state, dispatch, maxQty } = useBooking(initialSegment)
+  // The demo currently shows only the business (bulk order) flow; the household flow is kept but hidden.
+  const { state, dispatch, maxQty } = useBooking('business')
   const [processing, setProcessing] = useState(false)
   const [memoOpen, setMemoOpen] = useState(false)
   const [showSms, setShowSms] = useState(false)
@@ -82,13 +75,6 @@ export default function Demo() {
     clearTransient()
     dispatch({ type: 'reset' })
   }, [dispatch])
-
-  const switchSegment = (segment: Segment) => {
-    if (segment === state.segment) return
-    clearTransient()
-    dispatch({ type: 'setSegment', segment })
-    setParams(segment === 'business' ? { mode: 'business' } : {}, { replace: true })
-  }
 
   // Keyboard: Enter = Next, Esc = Back (ignored while typing or on buttons/links).
   useEffect(() => {
@@ -156,25 +142,9 @@ export default function Demo() {
                   {business ? SAMPLE_BUSINESS.commercialConsumerNo : `Consumer No. ${SAMPLE_CONNECTION.consumerNo}`}
                 </span>
               </div>
-              <div className="mt-3 grid grid-cols-2 gap-1 rounded-full bg-white/10 p-1" role="tablist" aria-label="Order type">
-                {SEGMENTS.map((s) => {
-                  const active = s.id === state.segment
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      onClick={() => switchSegment(s.id)}
-                      className={`inline-flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition ${
-                        active ? 'bg-flame-500 text-white' : 'text-white/70 hover:text-white'
-                      }`}
-                    >
-                      <s.icon className="h-3.5 w-3.5" /> {s.label}
-                    </button>
-                  )
-                })}
-              </div>
+              <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-flame-500 px-3 py-1.5 text-xs font-bold text-white">
+                <Building2 className="h-3.5 w-3.5" /> Business · Bulk
+              </p>
             </div>
 
             <div ref={scrollRef} className="relative flex-1 overflow-y-auto px-4 py-5">
@@ -255,24 +225,12 @@ export default function Demo() {
             </AnimatePresence>
           </PhoneFrame>
 
-          {/* mobile-only: eligibility scenario toggle */}
-          {!business && (
-            <label className="flex items-center gap-2 bg-navy-900 px-4 py-3 text-xs text-slate-300 lg:hidden">
-              <input
-                type="checkbox"
-                checked={state.notEligible}
-                onChange={(e) => setNotEligible(e.target.checked)}
-                className="h-4 w-4 accent-amber-400"
-              />
-              Show the “Not eligible yet” scenario
-            </label>
-          )}
         </div>
 
         {/* selected cylinder in 3D (desktop) */}
         <div className="hidden flex-1 flex-col items-start justify-center lg:flex">
           <div className="w-full max-w-xs">
-            <Cylinder3D variant={cyl.look} className="h-[380px] w-full" />
+            <IndaneCylinder3D look={cyl.look} className="h-[380px] w-full" />
             <p className="text-center font-heading text-lg font-bold text-white">{cyl.name}</p>
             <p className="text-center text-sm text-slate-400">{cyl.useCase}</p>
           </div>

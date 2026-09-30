@@ -1,9 +1,7 @@
-import { Building2, CalendarDays, FileText, MapPin, Phone } from 'lucide-react'
 import { Reveal } from '../ui/Reveal'
 import { SectionHeading } from '../ui/SectionHeading'
 import { MRP_CIRCULAR, MRP_GLOSSARY, MRP_ROWS } from '../../data/mrp'
 import { formatINR } from '../../lib/format'
-
 
 export function Documentation() {
   const c = MRP_CIRCULAR
@@ -17,90 +15,39 @@ export function Documentation() {
           subtitle={`Every cylinder below can be booked in the demo, at the MRPs in IOCL’s price circular for the ${c.market} market, ${c.month}.`}
         />
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr]">
-          {/* circular details */}
-          <Reveal>
-            <div className="h-full rounded-3xl bg-navy-900 p-6 text-slate-300">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-flame-500 text-white">
-                <FileText className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <h3 className="mt-4 text-lg font-bold text-white">{c.subject}</h3>
-
-              <dl className="mt-5 space-y-4 text-sm">
-                <div className="flex gap-3">
-                  <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" aria-hidden="true" />
-                  <div>
-                    <dt className="text-xs uppercase tracking-wider text-slate-400">Reference</dt>
-                    <dd className="font-semibold text-white">
-                      {c.ref}, dated {c.date}
-                    </dd>
-                  </div>
+        {/* price cards */}
+        <Reveal>
+          <h3 className="text-lg font-bold sm:text-xl">
+            MRP of LPG cylinders, {c.market}, {c.month} (₹, incl. GST)
+          </h3>
+          <ul className="mt-5 flex flex-wrap justify-center gap-3 sm:gap-4">
+            {MRP_ROWS.map((r) => (
+              <li
+                key={r.type}
+                className="flex w-[calc(50%-0.375rem)] flex-col rounded-3xl bg-white p-3 text-center shadow-card sm:w-[calc(33.333%-0.667rem)] lg:w-[calc(16.666%-0.834rem)]"
+              >
+                <img src={r.image} alt={`${r.type} Indane cylinder`} loading="lazy" className="aspect-square w-full rounded-2xl object-cover" />
+                <h4 className="mt-3 flex min-h-[2.5rem] items-center justify-center font-heading text-sm font-bold leading-tight sm:text-base">
+                  {r.type}
+                </h4>
+                <div className="mt-2 rounded-xl bg-slate-100 px-2 py-2">
+                  <p className="text-[0.65rem] font-semibold uppercase tracking-wider text-slate-500">MRP</p>
+                  <p className="font-heading text-base font-extrabold tabular-nums">{formatINR(r.price)}</p>
                 </div>
-                <div className="flex gap-3">
-                  <Building2 className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" aria-hidden="true" />
-                  <div>
-                    <dt className="text-xs uppercase tracking-wider text-slate-400">Issued by</dt>
-                    <dd className="font-semibold text-white">
-                      {c.issuedBy.name}, {c.issuedBy.designation}
-                    </dd>
-                    <dd>{c.office.name}</dd>
-                    <dd>{c.office.division}</dd>
-                  </div>
+                <div className="mt-2 flex-1 rounded-xl px-2 py-1.5">
+                  <p className="rounded-lg bg-slate-50 py-1 text-[0.6rem] font-semibold uppercase tracking-wider text-slate-500">XtraTej MRP</p>
+                  <p className="mt-1 text-sm tabular-nums text-slate-600">
+                    {r.xtraTej ? formatINR(r.xtraTej) : <span aria-label="Not listed">—</span>}
+                  </p>
                 </div>
-                <div className="flex gap-3">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" aria-hidden="true" />
-                  <div>
-                    <dt className="text-xs uppercase tracking-wider text-slate-400">Office</dt>
-                    <dd>{c.office.address}</dd>
-                    <dd className="mt-1 text-xs text-slate-400">Regd. office: {c.regdOffice}</dd>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" aria-hidden="true" />
-                  <div>
-                    <dt className="text-xs uppercase tracking-wider text-slate-400">Phone</dt>
-                    <dd>{c.office.phones.join(', ')}</dd>
-                  </div>
-                </div>
-              </dl>
-            </div>
-          </Reveal>
-
-          {/* price list */}
-          <Reveal delay={0.08}>
-            <div className="overflow-x-auto rounded-3xl bg-white p-2 shadow-card sm:p-4">
-              <table className="w-full text-sm">
-                <caption className="px-3 pb-3 pt-2 text-left text-sm font-semibold text-slate-500">
-                  MRP of LPG cylinders, {c.market}, {c.month} (₹, incl. GST)
-                </caption>
-                <thead>
-                  <tr className="border-b border-navy-900/10 text-left text-xs uppercase tracking-wider text-slate-500">
-                    <th scope="col" className="px-3 py-2 font-semibold">Cylinder type</th>
-                    <th scope="col" className="px-3 py-2 text-right font-semibold">MRP</th>
-                    <th scope="col" className="px-3 py-2 text-right font-semibold">XtraTej MRP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {MRP_ROWS.map((r) => (
-                    <tr key={r.type} className="border-b border-navy-900/5 last:border-0">
-                      <th scope="row" className="px-3 py-2.5 text-left font-semibold">
-                        {r.type}
-                      </th>
-                      <td className="whitespace-nowrap px-3 py-2.5 text-right font-heading font-bold tabular-nums">{formatINR(r.price)}</td>
-                      <td className="whitespace-nowrap px-3 py-2.5 text-right tabular-nums text-slate-500">
-                        {r.xtraTej ? formatINR(r.xtraTej) : <span aria-label="Not listed">—</span>}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Reveal>
-        </div>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
 
         {/* glossary */}
         <Reveal delay={0.12}>
-          <dl className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <dl className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {MRP_GLOSSARY.map((g) => (
               <div key={g.term} className="rounded-2xl bg-white p-4 shadow-card">
                 <dt className="font-heading text-sm font-bold text-flame-600">{g.term}</dt>

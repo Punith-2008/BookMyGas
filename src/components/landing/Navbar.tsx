@@ -14,8 +14,6 @@ export const LANDING_LINKS: NavLinkItem[] = [
   { href: '#how-it-works', label: 'How it Works' },
   { href: '#docs', label: 'Prices' },
   { href: '#business', label: 'For Business' },
-  { href: '#compare', label: 'Why BookMyGas' },
-  { href: '/pitch', label: 'Pitch' },
 ]
 
 /** Hash links scroll within the page; paths like "/pitch" are router links. */
@@ -48,12 +46,12 @@ export function Navbar({ links = LANDING_LINKS, home = '#top' }: { links?: NavLi
         scrolled || open ? 'bg-white/80 shadow-card backdrop-blur-lg' : 'bg-transparent'
       }`}
     >
-      <nav className="container-x flex h-16 items-center justify-between" aria-label="Main">
+      <nav className="container-x relative flex h-16 items-center justify-between" aria-label="Main">
         <NavLink href={home} label="BookMyGas home">
           <CylinderLogo />
         </NavLink>
 
-        <ul className="hidden items-center gap-7 lg:flex">
+        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
           {links.map((l) => (
             <li key={l.href}>
               <NavLink href={l.href} className="text-sm font-semibold text-navy-900/80 transition-colors hover:text-flame-600">
